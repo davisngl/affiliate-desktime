@@ -17,3 +17,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# IDE files
+.phpstorm.meta.php
+
+# IDE Helper related files
+_ide_helper*
