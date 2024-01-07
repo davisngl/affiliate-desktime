@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,8 +21,10 @@ return new class extends Migration
              *
              * But, as this is a tiny app, it's fine.
              */
-            $table->string('affiliate_name')->nullable();
-            $table->foreignIdFor(\App\Models\User::class, 'referrer_id')->nullable();
+            $table->foreignIdFor(User::class, 'referrer_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
         });
     }
 };
