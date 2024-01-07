@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\AffiliateCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class ClickEventFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'affiliate_code_id' => AffiliateCode::factory(),
+            'clicked_at'        => now(),
         ];
     }
 }
