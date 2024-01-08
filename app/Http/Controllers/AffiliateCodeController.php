@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AffiliateLinkClicked;
 use App\Models\AffiliateCode;
 use Carbon\CarbonInterval;
 use Illuminate\Http\RedirectResponse;
@@ -28,6 +29,8 @@ class AffiliateCodeController extends Controller
              */
             return to_route('register');
         }
+
+        event(new AffiliateLinkClicked($affiliate));
 
         $affiliateCookie = Cookie::make(
             'affiliate',

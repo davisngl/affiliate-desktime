@@ -6,7 +6,6 @@ use App\Exceptions\AffiliateException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Carbon\CarbonInterval;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -102,6 +101,11 @@ class RegisteredUserController extends Controller
         logger()->info(
             'Affiliate has been registered!',
             ['user_id' => $user->id, 'referrer_id' => $referrer->id, 'code' => Arr::get($cookie, 'code')]
+        );
+
+        session()->flash(
+            'successful_affiliate_registration',
+            vsprintf('You have been successfully registered as one of %s affiliates!', [$referrer->name])
         );
 
         $user->update(['referrer_id' => $referrer->id]);
