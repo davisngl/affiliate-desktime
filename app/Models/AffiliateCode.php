@@ -21,4 +21,16 @@ class AffiliateCode extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function asCookiePayload(bool $encoded = false): array|string
+    {
+        $payload = [
+            'id'   => (int) $this->owner_id,
+            'name' => $this->owner->name,
+        ];
+
+        return $encoded
+            ? base64_encode(json_encode($payload))
+            : $payload;
+    }
 }

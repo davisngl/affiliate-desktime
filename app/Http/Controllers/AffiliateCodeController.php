@@ -20,13 +20,9 @@ class AffiliateCodeController extends Controller
             return to_route('register');
         }
 
-        $cookiePayload = [
-            'referrer' => $affiliate->owner->name,
-        ];
-
         $affiliateCookie = cookie(
             name: 'affiliate',
-            value: base64_encode(json_encode($cookiePayload)),
+            value: $affiliate->asCookiePayload(encoded: true),
 //            minutes: CarbonInterval::month()->totalMinutes,
             minutes: 1, // TODO revert back to month later on
             path: config('session.path'),
