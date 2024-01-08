@@ -68,7 +68,7 @@ class User extends Authenticatable
     {
         do {
             // Normally, code generation would be left to a mockable service,
-            // where we could control how the code gets created and such.
+            // where we could control how the code gets created and such (for tests).
             // But making it different through a factory is enough.
             $code = Str::random(10);
         } while (AffiliateCode::whereCode($code)->exists());
