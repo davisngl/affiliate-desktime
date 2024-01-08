@@ -33,11 +33,11 @@ class AffiliateCodeControllerTest extends TestCase
                 encrypted: false
             );
 
+        // Requires Dusk or equivalent to see JS load the cookie data in template,
+        // server-side rendered template will not have data we are displaying with JS.
         $this
             ->followRedirects($response)
-            ->assertSeeText(
-                vsprintf('Your friend %s has invited you', [$affiliate->owner->name])
-            );
+            ->assertSeeText('has invited you to join!');
     }
 
     /** @test */
