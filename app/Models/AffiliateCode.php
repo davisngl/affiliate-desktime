@@ -13,6 +13,10 @@ class AffiliateCode extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'code',
+    ];
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
