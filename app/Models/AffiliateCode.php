@@ -17,7 +17,7 @@ class AffiliateCode extends Model
         'code',
     ];
 
-    public function owner(): BelongsTo
+    public function referrer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -25,8 +25,9 @@ class AffiliateCode extends Model
     public function asCookiePayload(bool $encoded = false): array|string
     {
         $payload = [
-            'id'   => $this->user_id,
-            'name' => $this->owner->name,
+            'referrer_id' => $this->user_id,
+            'name'        => $this->referrer->name,
+            'code'        => $this->code,
         ];
 
         return $encoded
