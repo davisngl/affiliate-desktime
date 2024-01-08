@@ -27,7 +27,8 @@ class AffiliateCodeController extends Controller
             minutes: 1, // TODO revert back to month later on
             path: config('session.path'),
             domain: config('session.domain'),
-            secure: true
+            secure: true,
+            httpOnly: false
         );
 
         return response()

@@ -25,7 +25,7 @@ class AffiliateCode extends Model
     public function asCookiePayload(bool $encoded = false): array|string
     {
         $payload = [
-            'id'   => (int) $this->owner_id,
+            'id'   => $this->user_id,
             'name' => $this->owner->name,
         ];
 
