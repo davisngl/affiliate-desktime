@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -26,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'referrer_id',
     ];
 
     /**
@@ -61,5 +63,19 @@ class User extends Authenticatable
             'user_id',
             'referrer_id'
         );
+    }
+
+    public function createAffiliateUrl(): AffiliateCode
+    {
+        do {
+            // Normally, code generation would be left to a mockable service,
+            // where we could control how the code gets created and such (for tests).
+            // But making it different through a factory is enough.
+            $code = Str::random(10);
+        } while (AffiliateCode::whereCode($code)->exists());
+
+        return $this->affiliateCodes()->create([
+            'code' => $code,
+        ]);
     }
 }
