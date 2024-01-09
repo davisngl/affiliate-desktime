@@ -10,7 +10,7 @@ class RecordAffiliateLinkClickEvent
 	public function handle(AffiliateLinkClicked $event): void
 	{
         DB::transaction(static function () use ($event) {
-            $event->affiliate->clicks()->create();
+            $event->affiliate->clickEvents()->create();
             $event->affiliate->increment('clicks');
         });
 	}

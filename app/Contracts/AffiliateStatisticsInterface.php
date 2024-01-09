@@ -12,13 +12,6 @@ interface AffiliateStatisticsInterface
     public function setAffiliateCode(string $code): static;
 
     /**
-     * Amount of latest x days to use in aggregation.
-     *
-     * @return $this
-     */
-    public function durationInDays(int $amount): static;
-
-    /**
      * Get resulting statistics that are grouped by and aggregated.
      * @see https://www.chartjs.org/docs/latest/charts/bar.html for examples on how the data should be returned.
      *

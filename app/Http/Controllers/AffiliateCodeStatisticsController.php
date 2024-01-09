@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\AffiliateStatisticsInterface;
-use Carbon\CarbonInterval;
+use App\Models\AffiliateCode;
 
 class AffiliateCodeStatisticsController extends Controller
 {
-	public function __invoke(AffiliateStatisticsInterface $statistics, string $code)
+	public function __invoke(AffiliateStatisticsInterface $statistics, AffiliateCode $affiliate)
 	{
         return view('statistics', [
-            'chart_data' => $statistics
-                ->setAffiliateCode($code)
-                ->durationInDays(CarbonInterval::days(7)->days)
+            'dataset' => $statistics
+                ->setAffiliateCode($affiliate->code)
                 ->getGroupedData(),
         ]);
 	}

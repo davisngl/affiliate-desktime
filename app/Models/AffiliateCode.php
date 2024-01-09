@@ -23,7 +23,7 @@ class AffiliateCode extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function clicks(): HasMany
+    public function clickEvents(): HasMany
     {
         return $this->hasMany(ClickEvent::class);
     }

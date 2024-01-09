@@ -26,10 +26,10 @@
         new Chart(window.affiliate, {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: @js($dataset->labels()),
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    label: 'Clicks per day',
+                    data: @js($dataset->dataset()),
                     borderWidth: 1
                 }]
             },
