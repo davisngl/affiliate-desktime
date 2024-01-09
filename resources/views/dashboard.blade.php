@@ -51,7 +51,14 @@
                         <div class="mt-5 text-sm">
                             <ul class="list-disc list-inside">
                                 @foreach(auth()->user()->affiliateCodes as $affiliate)
-                                    <li><a class="text-blue-700 hover:underline" href="{{ $affiliate->url() }}">{{ $affiliate->url() }}</a></li>
+                                    <li>
+                                        <a
+                                            class="text-blue-700 hover:underline"
+                                            href="{{ route('affiliate-code-statistics.show', ['affiliate' => $affiliate->code]) }}"
+                                        >
+                                            {{ $affiliate->url() }}
+                                        </a>
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>
