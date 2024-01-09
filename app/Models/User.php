@@ -55,16 +55,6 @@ class User extends Authenticatable
         return $this->hasMany(AffiliateCode::class);
     }
 
-    public function referrer(): HasOneThrough
-    {
-        return $this->hasOneThrough(
-            User::class,
-            AffiliateCode::class,
-            'user_id',
-            'referrer_id'
-        );
-    }
-
     public function createAffiliateUrl(): AffiliateCode
     {
         do {
