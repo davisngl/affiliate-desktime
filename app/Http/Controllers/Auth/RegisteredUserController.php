@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Exceptions\AffiliateException;
+use App\Events\AffiliateRegistered;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
@@ -49,15 +48,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        try {
-            $this->handleAffiliation($request, $user);
-
-            Cookie::forget('affiliate');
-        } catch (AffiliateException $exception) {
-            return back()
-                ->withErrors(['affiliate', $exception->getMessage()])
-                ->withInput();
-        }
+        $this->handleAffiliation($request, $user);
 
         return redirect(RouteServiceProvider::HOME);
     }
@@ -73,29 +64,12 @@ class RegisteredUserController extends Controller
             return;
         }
 
-        $cookie = $request->decodeCookie('affiliate');
-        $referrer = User::find(Arr::get($cookie, 'referrer_id'));
-
-        if (! $referrer) {
-            logger()->warning(
-                'Referrer has not been found in system',
-                ['attempted_referrer_id' => Arr::get($cookie, 'referrer_id')]
-            );
-
-            throw AffiliateException::referrerDoesNotExist();
-        }
-
-        if (! $referrer->affiliateCodes()->where('code', Arr::get($cookie, 'code'))->exists()) {
-            logger()->warning(
-                'Registration process cancelled due to request tampering',
-                ['code' => $request->input('via'), 'referrer_id' => $referrer->id]
-            );
-
-            // This should provide security as code in request parameters
-            // should match the user id which had created the code (have to guess both referred id and code).
-            // For the sake of not going into details outside the homework scope, let's leave it at that.
-            throw AffiliateException::tamperedRequest();
-        }
+        $referrer = User::find(
+            Arr::get(
+                $cookie = $request->decodeCookie('affiliate'),
+                'referrer_id'
+            )
+        );
 
         logger()->info(
             'Affiliate has been registered!',
@@ -107,6 +81,8 @@ class RegisteredUserController extends Controller
             vsprintf('You have been successfully registered as one of %s affiliates!', [$referrer->name])
         );
 
-        $user->update(['referrer_id' => $referrer->id]);
+        event(
+            new AffiliateRegistered(referrer: $referrer, affiliate: $user)
+        );
     }
 }

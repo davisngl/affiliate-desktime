@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Events\AffiliateLinkClicked;
+use App\Events\AffiliateRegistered;
+use App\Listeners\ClearAffiliateCookies;
+use App\Listeners\MarkUserAsAffiliate;
 use App\Listeners\RecordAffiliateLinkClickEvent;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +25,11 @@ class EventServiceProvider extends ServiceProvider
 
         AffiliateLinkClicked::class => [
             RecordAffiliateLinkClickEvent::class,
+        ],
+
+        AffiliateRegistered::class => [
+            MarkUserAsAffiliate::class,
+            ClearAffiliateCookies::class,
         ],
     ];
 

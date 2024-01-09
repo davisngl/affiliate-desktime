@@ -2,8 +2,13 @@
 
 namespace Tests\Feature\Controllers;
 
+use App\Events\AffiliateRegistered;
+use App\Listeners\ClearAffiliateCookies;
+use App\Listeners\MarkUserAsAffiliate;
 use App\Models\AffiliateCode;
+use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
@@ -49,5 +54,44 @@ class AffiliateCodeControllerTest extends TestCase
             ->visitAffiliateUrl(':does_not_exist:')
             ->assertRedirect(route('register'))
             ->assertCookieMissing('affiliate');
+    }
+
+    /** @test */
+    public function it_marks_user_as_referred_by_someone_else_after_successful_affiliate_registration()
+    {
+        Event::fake(AffiliateRegistered::class);
+
+        $referrer = User::factory()->create();
+        $affiliate = AffiliateCode::factory()
+            ->create([
+                'user_id' => $referrer->id,
+                'code'    => 'aff_code',
+            ]);
+
+        $this->assertInstanceOf(User::class, $affiliate->referrer);
+
+        $this
+            ->from(route('register'))
+            ->withUnencryptedCookie('affiliate', $affiliate->asCookiePayload(encoded: true))
+            ->post(route('register'), [
+                'name'                  => ':full_name:',
+                'email'                 => $email = 'test@example.com',
+                'password'              => $password = 'incredible_password1',
+                'password_confirmation' => $password,
+            ])
+            ->assertSessionHas(
+                'successful_affiliate_registration',
+                vsprintf('You have been successfully registered as one of %s affiliates!', [$referrer->name])
+            )
+            ->assertCookieMissing('affiliate');
+
+        Event::assertDispatched(AffiliateRegistered::class);
+
+        $event = new AffiliateRegistered($referrer, User::whereEmail($email)->first());
+
+        (new MarkUserAsAffiliate)->handle($event);
+        (new ClearAffiliateCookies)->handle($event);
+
+        $this->assertEquals(1, User::where('referrer_id', $referrer->id)->count());
     }
 }
