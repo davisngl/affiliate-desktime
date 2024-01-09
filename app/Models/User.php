@@ -6,7 +6,6 @@ namespace App\Models;
 use App\Contracts\AffiliateLinkGeneratorInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -63,15 +62,6 @@ class User extends Authenticatable
             AffiliateCode::class,
             'user_id',
             'referrer_id'
-        );
-    }
-
-    public function referred(): HasManyThrough
-    {
-        return $this->hasManyThrough(
-            User::class,
-            AffiliateCode::class,
-
         );
     }
 
