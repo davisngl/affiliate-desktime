@@ -17,6 +17,13 @@ class ClickEvent extends Model
         'clicked_at' => 'datetime',
     ];
 
+    protected static function booted(): void
+    {
+        static::deleting(function (ClickEvent $event) {
+            $event->affiliateCode->decrement('clicks');
+        });
+    }
+
     public function affiliateCode(): BelongsTo
     {
         return $this->belongsTo(AffiliateCode::class);
