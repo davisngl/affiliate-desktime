@@ -21,7 +21,10 @@ class AffiliateCodeController extends Controller
         );
 
         if (! $affiliate) {
-            logger()->warning('Affiliate code has not been found', ['code' => $code]);
+            logger()->warning(
+                'Affiliate code has not been found, proceeding with normal registration',
+                ['code' => $code]
+            );
 
             /**
              * Having invalid affiliate code would only send

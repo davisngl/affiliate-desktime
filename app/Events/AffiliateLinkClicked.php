@@ -5,7 +5,7 @@ namespace App\Events;
 use App\Models\AffiliateCode;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class AffiliateLinkClicked
+readonly class AffiliateLinkClicked
 {
 	use Dispatchable;
 

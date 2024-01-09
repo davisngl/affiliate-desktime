@@ -10,9 +10,8 @@ Route::view('/dashboard', 'dashboard')
     ->name('dashboard.index');
 
 Route::get('/referral/{affiliate:code}', AffiliateCodeController::class)
-    ->middleware('guest')
+    ->middleware(['guest', 'throttle:5,1'])
     ->name('affiliate-code.show');
-
 Route::get('/referral-statistics/{affiliate:code}', AffiliateCodeStatisticsController::class)
     ->name('affiliate-code-statistics.show');
 
