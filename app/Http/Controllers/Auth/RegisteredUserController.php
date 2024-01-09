@@ -55,7 +55,7 @@ class RegisteredUserController extends Controller
 
     private function handleAffiliation(Request $request, User $user)
     {
-        if (! $request->hasCookie('affiliate')) {
+        if (! $request->hasCookie(config('affiliate.cookie_name'))) {
             logger()->info(
                 'Affiliate cookie has not been found. No affiliation has been processed',
                 ['user_id' => $user->id]
@@ -66,7 +66,7 @@ class RegisteredUserController extends Controller
 
         $referrer = User::find(
             Arr::get(
-                $cookie = $request->decodeCookie('affiliate'),
+                $cookie = $request->decodeCookie(config('affiliate.cookie_name')),
                 'referrer_id'
             )
         );

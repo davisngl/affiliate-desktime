@@ -34,7 +34,7 @@ class AffiliateCodeControllerTest extends TestCase
             ->visitAffiliateUrl($affiliate->code)
             ->assertRedirect(route('register', ['via' => $affiliate->code]))
             ->assertCookie(
-                cookieName: 'affiliate',
+                cookieName: config('affiliate.cookie_name'),
                 value: $affiliate->asCookiePayload(encoded: true),
                 encrypted: false
             );
@@ -54,7 +54,7 @@ class AffiliateCodeControllerTest extends TestCase
         $this
             ->visitAffiliateUrl(':does_not_exist:')
             ->assertRedirect(route('register'))
-            ->assertCookieMissing('affiliate');
+            ->assertCookieMissing(config('affiliate.cookie_name'));
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class AffiliateCodeControllerTest extends TestCase
 
         $this
             ->from(route('register'))
-            ->withUnencryptedCookie('affiliate', $affiliate->asCookiePayload(encoded: true))
+            ->withUnencryptedCookie(config('affiliate.cookie_name'), $affiliate->asCookiePayload(encoded: true))
             ->post(route('register'), [
                 'name'                  => ':full_name:',
                 'email'                 => $email = 'test@example.com',
@@ -84,7 +84,7 @@ class AffiliateCodeControllerTest extends TestCase
                 'successful_affiliate_registration',
                 vsprintf('You have been successfully registered as one of %s affiliates!', [$referrer->name])
             )
-            ->assertCookieMissing('affiliate');
+            ->assertCookieMissing(config('affiliate.cookie_name'));
 
         Event::assertDispatched(AffiliateRegistered::class);
 
