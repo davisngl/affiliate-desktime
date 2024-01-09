@@ -84,17 +84,16 @@ class AffiliateCodeControllerTest extends TestCase
                 'successful_affiliate_registration',
                 vsprintf('You have been successfully registered as one of %s affiliates!', [$referrer->name])
             )
-            ->assertCookieMissing(config('affiliate.cookie_name'));
+            ->assertCookieExpired(config('affiliate.cookie_name'));
 
         Event::assertDispatched(AffiliateRegistered::class);
 
         $event = new AffiliateRegistered($referrer, User::whereEmail($email)->first());
 
         (new MarkUserAsAffiliate)->handle($event);
-        (new ClearAffiliateCookies)->handle($event);
         (new CreateAffiliateLinks)->handle($event);
 
-        $this->assertEquals(1, User::where('referrer_id', $referrer->id)->count());
-        $this->assertCount(3, User::where('referrer_id', $referrer->id)->first()->affiliateCodes);
+        $this->assertEquals(1, User::where('affiliate_code_id', $affiliate->id)->count());
+        $this->assertCount(3, User::where('affiliate_code_id', $affiliate->id)->first()->affiliateCodes);
     }
 }

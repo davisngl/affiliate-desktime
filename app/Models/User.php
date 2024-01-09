@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Contracts\AffiliateLinkGeneratorInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -27,7 +28,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'referrer_id',
+        'affiliate_code_id',
     ];
 
     /**
@@ -53,6 +54,16 @@ class User extends Authenticatable
     public function affiliateCodes(): HasMany
     {
         return $this->hasMany(AffiliateCode::class);
+    }
+
+    /**
+     * Code that was used to be registered as an affiliate for someone.
+     *
+     * @return BelongsTo
+     */
+    public function referralCode(): BelongsTo
+    {
+        return $this->belongsTo(AffiliateCode::class, 'affiliate_code_id');
     }
 
     public function createAffiliateUrl(): AffiliateCode

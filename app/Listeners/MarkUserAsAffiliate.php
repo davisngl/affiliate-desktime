@@ -9,7 +9,7 @@ class MarkUserAsAffiliate
 	public function handle(AffiliateRegistered $event): void
 	{
         $event->affiliate->update([
-            'referrer_id' => $event->referrer->id,
+            'affiliate_code_id' => $event->referrer->id,
         ]);
 	}
 }
