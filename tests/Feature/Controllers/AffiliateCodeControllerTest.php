@@ -4,6 +4,7 @@ namespace Tests\Feature\Controllers;
 
 use App\Events\AffiliateRegistered;
 use App\Listeners\ClearAffiliateCookies;
+use App\Listeners\CreateAffiliateLinks;
 use App\Listeners\MarkUserAsAffiliate;
 use App\Models\AffiliateCode;
 use App\Models\User;
@@ -91,7 +92,9 @@ class AffiliateCodeControllerTest extends TestCase
 
         (new MarkUserAsAffiliate)->handle($event);
         (new ClearAffiliateCookies)->handle($event);
+        (new CreateAffiliateLinks)->handle($event);
 
         $this->assertEquals(1, User::where('referrer_id', $referrer->id)->count());
+        $this->assertCount(3, User::where('referrer_id', $referrer->id)->first()->affiliateCodes);
     }
 }

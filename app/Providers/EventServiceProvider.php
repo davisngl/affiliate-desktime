@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\AffiliateLinkClicked;
 use App\Events\AffiliateRegistered;
 use App\Listeners\ClearAffiliateCookies;
+use App\Listeners\CreateAffiliateLinks;
 use App\Listeners\MarkUserAsAffiliate;
 use App\Listeners\RecordAffiliateLinkClickEvent;
 use Illuminate\Auth\Events\Registered;
@@ -30,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
         AffiliateRegistered::class => [
             MarkUserAsAffiliate::class,
             ClearAffiliateCookies::class,
+            CreateAffiliateLinks::class,
         ],
     ];
 
