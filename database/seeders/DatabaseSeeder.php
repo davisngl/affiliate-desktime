@@ -29,21 +29,22 @@ class DatabaseSeeder extends Seeder
         $url2 = $user->createAffiliateUrl();
         $url3 = $user->createAffiliateUrl();
 
-        collect([$url1, $url2, $url3])
-            ->each(function (AffiliateCode $code) {
-                $clicks = ClickEvent::factory(random_int(5, 30))
-                    ->state(new Sequence(
-                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
-                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
-                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
-                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
-                        ['clicked_at'        => now()->subDays(random_int(0, 7))]
-                    ))
-                    ->create([
-                        'affiliate_code_id' => $code->id,
-                    ]);
-
-                $code->clickEvents()->saveMany($clicks);
-            });
+        // Uncomment me to add some statistics to existing links
+//        collect([$url1, $url2, $url3])
+//            ->each(function (AffiliateCode $code) {
+//                $clicks = ClickEvent::factory(random_int(5, 30))
+//                    ->state(new Sequence(
+//                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
+//                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
+//                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
+//                        ['clicked_at'        => now()->subDays(random_int(0, 7))],
+//                        ['clicked_at'        => now()->subDays(random_int(0, 7))]
+//                    ))
+//                    ->create([
+//                        'affiliate_code_id' => $code->id,
+//                    ]);
+//
+//                $code->clickEvents()->saveMany($clicks);
+//            });
     }
 }
