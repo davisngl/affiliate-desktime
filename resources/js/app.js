@@ -2,7 +2,9 @@ import './bootstrap'
 
 import Alpine from 'alpinejs'
 import Cookies from 'js-cookie'
+import Chart from 'chart.js/auto'
 
+window.Chart = Chart
 window.Alpine = Alpine
 
 Alpine.data('affiliate', () => ({
