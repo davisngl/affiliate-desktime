@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     @if(session()->has('successful_affiliate_registration'))
-                        <div class="rounded-md bg-green-50 p-4">
+                        <div class="rounded-md bg-green-50 p-4 mb-5">
                             <div class="flex">
                                 <div class="flex-shrink-0">
                                     <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor"

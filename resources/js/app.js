@@ -12,13 +12,17 @@ Alpine.data('affiliate', () => ({
     via: new URL(location.href).searchParams.get('via'),
 
     init() {
+        const cookie = JSON.parse(atob(Cookies.get('affiliate')))
+
         if (! this.via && Cookies.get('affiliate')) {
-            // When user wants to create different account, old affiliate cookie might be present
-            return Cookies.remove('affiliate')
+            // If there's a cookie present, we will still be remembering the guest
+            window.location.href = `${(window.location.href)}?via=${cookie.code}`
+
+            return
         }
 
         if (Cookies.get('affiliate')) {
-            this.affiliate = JSON.parse(atob(Cookies.get('affiliate')))
+            this.affiliate = cookie
         }
     }
 }))

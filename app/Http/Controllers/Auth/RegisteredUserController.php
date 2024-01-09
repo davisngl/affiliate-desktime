@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
@@ -50,7 +51,10 @@ class RegisteredUserController extends Controller
 
         $this->handleAffiliation($request, $user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::HOME)
+            ->withCookie(
+                Cookie::forget(config('affiliate.cookie_name'))
+            );
     }
 
     private function handleAffiliation(Request $request, User $user)

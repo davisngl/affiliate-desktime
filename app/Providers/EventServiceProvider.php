@@ -30,7 +30,6 @@ class EventServiceProvider extends ServiceProvider
 
         AffiliateRegistered::class => [
             MarkUserAsAffiliate::class,
-            ClearAffiliateCookies::class,
             CreateAffiliateLinks::class,
         ],
     ];
