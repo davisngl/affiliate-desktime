@@ -73,8 +73,7 @@ class RegisteredUserController extends Controller
             return;
         }
 
-        $cookie = json_decode(base64_decode($request->cookie('affiliate')), true);
-
+        $cookie = $request->decodeCookie('affiliate');
         $referrer = User::find(Arr::get($cookie, 'referrer_id'));
 
         if (! $referrer) {
@@ -89,7 +88,7 @@ class RegisteredUserController extends Controller
         if (! $referrer->affiliateCodes()->where('code', Arr::get($cookie, 'code'))->exists()) {
             logger()->warning(
                 'Registration process cancelled due to request tampering',
-                ['code' => $request->input('via'), 'referrer_id' => $referrer->id,]
+                ['code' => $request->input('via'), 'referrer_id' => $referrer->id]
             );
 
             // This should provide security as code in request parameters

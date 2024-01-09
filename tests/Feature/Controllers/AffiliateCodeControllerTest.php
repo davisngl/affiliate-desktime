@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use App\Models\AffiliateCode;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -15,7 +15,7 @@ class AffiliateCodeControllerTest extends TestCase
     {
         return $this
             ->get(
-                route('affiliate-code', ['affiliate' => $affiliateCode])
+                route('affiliate-code.show', ['affiliate' => $affiliateCode])
             );
     }
 

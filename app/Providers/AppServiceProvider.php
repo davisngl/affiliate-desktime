@@ -7,6 +7,7 @@ use App\Contracts\BarChartDatasetInterface;
 use App\DTO\ChartJsBarChartDataset;
 use App\Services\AffiliateStatistics;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,5 +29,11 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict(
             app()->environment(['local', 'development', 'staging'])
         );
+
+        Request::macro('decodeCookie', function (string $cookie) {
+            return json_decode(
+                base64_decode($this->cookie($cookie)), true
+            );
+        });
     }
 }

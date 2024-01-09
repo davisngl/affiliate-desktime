@@ -11,6 +11,8 @@
             </template>
         </div>
 
+        <x-input-error :messages="$errors->get('affiliate')" class="mt-2"/>
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')"/>
