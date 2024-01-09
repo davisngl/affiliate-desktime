@@ -35,9 +35,7 @@ class AffiliateStatistics implements AffiliateStatisticsInterface
             throw StatisticsException::affiliateCodeNotSet();
         }
 
-        $data = auth()->user()
-            ->affiliateCodes()
-            ->firstWhere('code', $this->affiliateCode)
+        $data = AffiliateCode::firstWhere('code', $this->affiliateCode)
             ->clickEvents()
             ->whereBetween('clicked_at', [now()->subDays(7)->startOfDay(), now()->endOfDay()])
             ->orderBy('clicked_at')
