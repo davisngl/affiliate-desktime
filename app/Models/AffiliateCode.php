@@ -40,4 +40,9 @@ class AffiliateCode extends Model
             ? base64_encode(json_encode($payload))
             : $payload;
     }
+
+    public function url(): string
+    {
+        return route('affiliate-code.show', ['affiliate' => $this->code]);
+    }
 }
